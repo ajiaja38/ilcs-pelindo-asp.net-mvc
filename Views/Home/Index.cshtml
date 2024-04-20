@@ -2,7 +2,92 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <h2>Final Test ILCS Pelindo</h2>
+    <form method="post" action="/Home/SubmitForm" class="d-flex flex-column gap-2">
+        <div class="form-group d-flex flex-column gap-2">
+            <label class="" for="negara">Negara</label>
+            <input type="text" id="negara" name="negara" class="form-control" placeholder="Masukkan Negara">
+        </div>
+        <div class="form-group d-flex flex-column gap-2">
+            <label class="" for="pelabuhan">Pelabuhan</label>
+            <input type="text" id="pelabuhan" name="pelabuhan" class="form-control" placeholder="Masukkan Pelabuhan">
+            <div id="pelabuhanSuggestions"></div>
+        </div>
+        <div class="form-group d-flex flex-column gap-2">
+            <label class="" for="barang">Barang</label>
+            <input type="text" id="barang" name="barang" class="form-control" placeholder="Masukkan Kode Barang">
+            <textarea id="deskripsi" name="deskripsi" class="form-control" placeholder="List Barang"></textarea>
+        </div>
+        <div class="form-group d-flex flex-column gap-2">
+            <label class="" for="harga">Harga</label>
+            <input type="text" id="harga" name="harga" class="form-control" placeholder="Masukkan Kode Barang">
+        </div>
+        <div class="form-group d-flex flex-column gap-2">
+            <label class="" for="tarifBeaMasuk">Tarif Bea Masuk</label>
+            <input type="text" id="tarifBeaMasuk" name="tarifBeaMasuk" class="form-control" placeholder="Masukkan Kode Barang">
+            <textarea id="total" name="total" class="form-control" placeholder="total bea"></textarea>
+        </div>
+    </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const negaraInput = document.getElementById('negara');
+    const pelabuhanInput = document.getElementById('pelabuhan');
+    const pelabuhanSuggestionsContainer = document.getElementById('pelabuhanSuggestions');
+
+    negaraInput.addEventListener('input', function() {
+        const searchText = this.value;
+        if (searchText.length >= 3) {
+            fetch(`https://insw-dev.ilcs.co.id/n/negara?ur_negara=${searchText}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const kodeNegara = data[0].kd_negara;
+                        fetch(`https://insw-dev.ilcs.co.id/n/pelabuhan?kd_negara=${kodeNegara}&ur_pelabuhan=`)
+                            .then(response => response.json())
+                            .then(data => {
+                                pelabuhanSuggestionsContainer.innerHTML = '';
+                                data.forEach(pelabuhan => {
+                                    const option = document.createElement('div');
+                                    option.textContent = pelabuhan.nama_pelabuhan;
+                                    pelabuhanSuggestionsContainer.appendChild(option);
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error fetching pelabuhan data:', error);
+                            });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching negara data:', error);
+                });
+        } else {
+            pelabuhanSuggestionsContainer.innerHTML = '';
+        }
+    });
+
+    const tarifBeaMasukInput = document.getElementById('tarifBeaMasuk');
+    const totalInput = document.getElementById('total');
+
+    tarifBeaMasukInput.addEventListener('input', function() {
+        const searchText = this.value;
+        if (searchText.length >= 3) {
+            fetch(`https://insw-dev.ilcs.co.id/n/tarif?hs_code=${searchText}`)
+                .then(response => response.json())
+                .then(data => {
+                    totalInput.value = '';
+                    data.forEach(tarif => {
+                        totalInput.value += `${tarif.nama_tarif}: ${tarif.totalInput}\n`;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching tarif data:', error);
+                });
+        } else {
+            totalInput.value = '';
+        }
+    });
+});
+</script>

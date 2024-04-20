@@ -28,3 +28,4 @@
 /home/enigma/Documents/Bootcamp Enigma Batch 15/Placement/Test/ilcs-pelindo/obj/Debug/net8.0/ilcs-pelindo.pdb
 /home/enigma/Documents/Bootcamp Enigma Batch 15/Placement/Test/ilcs-pelindo/obj/Debug/net8.0/ilcs-pelindo.genruntimeconfig.cache
 /home/enigma/Documents/Bootcamp Enigma Batch 15/Placement/Test/ilcs-pelindo/obj/Debug/net8.0/ref/ilcs-pelindo.dll
+/home/enigma/Documents/Bootcamp Enigma Batch 15/Placement/Test/ilcs-pelindo/obj/Debug/net8.0/ilcs-pelindo.sourcelink.json
